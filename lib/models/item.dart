@@ -1,3 +1,5 @@
+import 'package:flutter/src/widgets/icon_data.dart';
+
 class Item {
   // String _name = '';
   // int _price = 0;
@@ -7,23 +9,28 @@ class Item {
   String? _name;
   int? _price;
   int? _id;
+  String? _kode;
 
   int get id => _id!;
 
-  String get name => this._name!;
+  String get name => _name!;
   set name(String value) => this._name = value;
 
-  get price => this._price!;
-  set price(value) => this._price = value;
+  get price => _price!;
+  set price(value) => _price = value;
+
+  String get kode => _kode!;
+  set kode(String value) => _kode = value;
 
 // konstruktor versi 1
-  Item(this._name, this._price);
+  Item(this._name, this._price, IconData ad_units, this._kode);
 
 // konstruktor versi 2: konversi dari Map ke Item
   Item.fromMap(Map<String, dynamic> map) {
-    this._id = map['id'];
-    this._name = map['name'];
-    this._price = map['price'];
+    _id = map['id'];
+    _name = map['name'];
+    _price = map['price'];
+    _kode = map['kode'];
   }
 // konversi dari Item ke Map
   Map<String, dynamic> toMap() {
@@ -31,6 +38,8 @@ class Item {
     map['id'] = this._id;
     map['name'] = name;
     map['price'] = price;
+    map['kode'] = kode;
+
     return map;
   }
 }

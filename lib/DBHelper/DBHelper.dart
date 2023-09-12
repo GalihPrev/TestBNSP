@@ -12,9 +12,14 @@ class DbHelper {
 //untuk menentukan nama database dan lokasi yg dibuat
     Directory directory = await getApplicationDocumentsDirectory();
     String path = directory.path + 'item.db';
-//create, read databases
-    var itemDatabase = openDatabase(path, version: 4, onCreate: _createDb);
-//mengembalikan nilai object sebagai hasil dari fungsinya
+// Open or create the database with a specified version
+    var itemDatabase = await openDatabase(
+      path,
+      version: 2, // Update the version number to match your new schema
+      onCreate: _createDb,
+      onUpgrade: _onUpgrade, // Call the onUpgrade method when needed
+    );
+
     return itemDatabase;
   }
 
@@ -24,9 +29,18 @@ class DbHelper {
 CREATE TABLE item (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT,
-price INTEGER
+price INTEGER,
+kode TEXT
 )
 ''');
+  }
+
+  // add new column in databse
+
+  void _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < newVersion) {
+      await db.execute('''ALTER TABLE item ADD COLUMN kode TEXT''');
+    }
   }
 
 //select databases
@@ -36,7 +50,7 @@ price INTEGER
     return mapList;
   }
 
-//create databasesa
+//create databases
   Future<int> insert(Item object) async {
     Database db = await this.initDb();
     int count = await db.insert('item', object.toMap());

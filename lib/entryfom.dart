@@ -19,15 +19,17 @@ class _EntryFormState extends State<EntryForm> {
   @override
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
+  TextEditingController kodeController = TextEditingController();
 
   Widget build(BuildContext context) {
     if (item != null) {
       nameController.text = item!.name;
       priceController.text = item!.price.toString();
+      kodeController.text = item!.kode;
     }
     return Scaffold(
       appBar: AppBar(
-        title: item == null ? Text("tambah  Barang") : Text("Ubah"),
+        title: item == null ? const Text("tambah  Barang") : const Text("Ubah"),
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -39,18 +41,18 @@ class _EntryFormState extends State<EntryForm> {
         ),
       ),
       body: Padding(
-        padding: EdgeInsets.only(left: 10, right: 10, top: 15),
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 15),
         child: ListView(
           children: [
             // Nama Barang
             Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: TextField(
                 controller: nameController,
                 decoration: InputDecoration(
                   labelText: "Nama Barang",
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onChanged: (value) {},
@@ -59,14 +61,30 @@ class _EntryFormState extends State<EntryForm> {
 
             // Harga Barng
             Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: TextField(
                 controller: priceController,
                 keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   labelText: "Harga Barang",
                   border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(5),
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (value) {},
+              ),
+            ),
+
+            //Kode Barang
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: TextField(
+                controller: kodeController,
+                keyboardType: TextInputType.number,
+                decoration: InputDecoration(
+                  labelText: "Kode Barang",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 onChanged: (value) {},
@@ -74,25 +92,33 @@ class _EntryFormState extends State<EntryForm> {
             ),
             // Button
             Padding(
-              padding: EdgeInsets.only(top: 20, bottom: 20),
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
               child: Row(
                 children: [
                   Expanded(
                     child: ElevatedButton(
-                      child: Text(
+                      child: const Text(
                         'Simpan',
                         textScaleFactor: 1.5,
                       ),
                       onPressed: () {
                         if (item == null) {
                           // tambah data
-                          item = Item(nameController.text,
-                              int.parse(priceController.text));
+                          item = Item(
+                            nameController.text,
+                            double.tryParse(priceController.text)?.toInt() ?? 0,
+                            Icons.ad_units,
+                            kodeController.text,
+                          );
                         } else {
                           // ubah data
                           item!.name = nameController.text;
-                          item!.price = int.parse(priceController.text);
+                          item!.price = double.tryParse(priceController.text)
+                                  ?.toInt() ??
+                              0; // Convert to integer or default to 0 if parsing fails
+                          item!.kode = kodeController.text;
                         }
+
                         //Kembali ke page sebelumnya dan membawa objek item
                         Navigator.pop(context, item);
                       },
@@ -103,7 +129,7 @@ class _EntryFormState extends State<EntryForm> {
                   //Button batal
                   Expanded(
                     child: ElevatedButton(
-                      child: Text(
+                      child: const Text(
                         "Batal",
                         textScaleFactor: 1.5,
                       ),
