@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_sertifikasi/HomePage.dart';
 import 'package:flutter_sertifikasi/models/item.dart';
 
+// ignore: must_be_immutable
 class EntryForm extends StatefulWidget {
   Item? item;
 
   EntryForm(this.item);
 
   @override
+  // ignore: library_private_types_in_public_api, no_logic_in_create_state
   _EntryFormState createState() => _EntryFormState(item);
   // State<EntryFom> createState() => _EntryFomState();
 }
@@ -20,12 +21,14 @@ class _EntryFormState extends State<EntryForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController priceController = TextEditingController();
   TextEditingController kodeController = TextEditingController();
+  TextEditingController deskripsiController = TextEditingController();
 
   Widget build(BuildContext context) {
     if (item != null) {
       nameController.text = item!.name;
       priceController.text = item!.price.toString();
       kodeController.text = item!.kode;
+      deskripsiController.text = item!.deskripsi;
     }
     return Scaffold(
       appBar: AppBar(
@@ -90,6 +93,19 @@ class _EntryFormState extends State<EntryForm> {
                 onChanged: (value) {},
               ),
             ),
+            Padding(
+              padding: const EdgeInsets.only(top: 20, bottom: 20),
+              child: TextField(
+                controller: deskripsiController,
+                decoration: InputDecoration(
+                  labelText: "Deskripsi Barang",
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                ),
+                onChanged: (value) {},
+              ),
+            ),
             // Button
             Padding(
               padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -109,6 +125,7 @@ class _EntryFormState extends State<EntryForm> {
                             double.tryParse(priceController.text)?.toInt() ?? 0,
                             Icons.ad_units,
                             kodeController.text,
+                            deskripsiController.text,
                           );
                         } else {
                           // ubah data
@@ -117,6 +134,7 @@ class _EntryFormState extends State<EntryForm> {
                                   ?.toInt() ??
                               0; // Convert to integer or default to 0 if parsing fails
                           item!.kode = kodeController.text;
+                          item!.deskripsi = deskripsiController.text;
                         }
 
                         //Kembali ke page sebelumnya dan membawa objek item

@@ -30,7 +30,8 @@ CREATE TABLE item (
 id INTEGER PRIMARY KEY AUTOINCREMENT,
 name TEXT,
 price INTEGER,
-kode TEXT
+kode TEXT,
+deskripsi TEXT
 )
 ''');
   }
@@ -40,6 +41,7 @@ kode TEXT
   void _onUpgrade(Database db, int oldVersion, int newVersion) async {
     if (oldVersion < newVersion) {
       await db.execute('''ALTER TABLE item ADD COLUMN kode TEXT''');
+      await db.execute('''ALTER TABLE item ADD COLUMN deskripsi TEXT''');
     }
   }
 
